@@ -1,1 +1,95 @@
+%Imports and plots time signals 
+%importing the 4 .wav files 
+%sampleing frequency is 48KHz
+e_String = audioread("E.wav");
+a_String = audioread("A.wav");
+d_String = audioread("D.wav");
+g_String = audioread("G.wav");
 
+%plotting the 4 time signals to the same figure in order EADG
+figure;
+subplot(2,2,1)
+plot(e_String)
+title("E String")
+xlabel("Time")
+ylabel("Amplitude")
+
+subplot(2,2,2)
+plot(a_String)
+title("A String")
+xlabel("Time")
+ylabel("Amplitude")
+
+subplot(2,2,3)
+plot(d_String)
+title("D string")
+xlabel("Time")
+ylabel("Amplitude")
+
+subplot(2,2,4)
+plot(g_String)
+title("G String")
+xlabel("Time")
+ylabel("Amplitude")
+%% 
+%FFT of the 4 time signals 
+Fs=48000; %sampleing frequecny 
+T=1/Fs;    %sample period 
+Le=119744; %number of data point in each signal
+La=119744;
+Ld=115648;
+Lg=107465;
+
+%conduct the DFT of each signal 
+Ye=fft(e_String);
+Ya=fft(a_String);
+Yd=fft(d_String);
+Yg=fft(g_String);
+
+%plot the spectrum of each signal 
+
+figure;
+range=2000; % value to trim low energy high frequencies for accuracy 
+p2e=abs(Ye/Le); % scale spectrum by the length 
+p1e=p2e(1:range); % remove the everything above the cutoff frequencie (including mirror frequencies )
+p1e(2:(end-1))=2*p1e(2:(end-1)); %multiply every frequency except DC and nyquist by 2 
+
+Fe=Fs/Le*(0:(range-1)); %define frequency domain
+subplot(2,2,1)
+plot(Fe,p1e) % plot result
+title("constrianed frequency spectrum of e string signal")
+xlabel("f(Hz)")
+ylabel("|p1(f)|")
+%
+p2a=abs(Ya/La);
+p1a=p2a(1:range);
+p1a(2:end-1)=2*p1a(2:end-1);
+
+Fa = Fs/La*(0:range-1);
+subplot(2,2,2)
+plot(Fa,p1a) % plot result
+title("constrianed frequency spectrum of a string signal")
+xlabel("f(Hz)")
+ylabel("|p1(f)|")
+%
+p2d=abs(Yd/Ld);
+p1d=p2d(1:range);
+p1d(2:end-1)=2*p1d(2:end-1);
+
+Fd = Fs/Ld*(0:range-1);
+subplot(2,2,3)
+plot(Fd,p1d) % plot result
+title("constrianed frequency spectrum of d string signal")
+xlabel("f(Hz)")
+ylabel("|p1(f)|")
+%
+p2g=abs(Yg/Lg);
+p1g=p2g(1:range);
+p1g(2:end-1)=2*p1g(2:end-1);
+
+Fg = Fs/Lg*(0:range-1);
+subplot(2,2,4)
+plot(Fg,p1g) % plot result
+title("constrianed frequency spectrum of g string signal")
+xlabel("f(Hz)")
+ylabel("|p1(f)|")
