@@ -1,1 +1,48 @@
+class note:
+    """A CLass to represent a preset note with a fixed frequency
+    Args:
+        private frequency (float): The frequency of the note in Hz
+    Methods:
+        __init__(self, frequency): Initializes the note with the given frequency
+        GetFrequency(self): Returns the frequency of the note
 
+    """
+    def __init__(self, frequency):
+        self.__frequency = abs(frequency)
+    def GetFrequency(self):
+        return self.__frequency
+
+
+class Signal(note):
+    """A Class to represent a real signal inherted from the note class with a modifiable frequency
+    Args:
+        public frequency (float): The frequency of the signal in Hz
+    Methods:
+        __init__(self, frequency): Initializes the signal with the given frequency
+        GetFrequency(self): Returns the frequency of the signal
+        SetFrequency(self, frequency): Sets the frequency of the signal to the given value
+    """
+    def __init__(self, frequency):
+        super().__init__(frequency)
+        self.frequency = abs(frequency)
+    def SetFrequency(self, frequency):
+        self.frequency = frequency
+
+
+class scale:
+    """A Class to represent a musical scale with a list of notes
+    Args:
+        notes (list): A list of note objects representing the notes in the scale
+        keys (list): A list of keys as characters representing the notes in the scale
+    Methods:
+        __init__(self, notes): Initializes the scale with the given list of notes
+        GetNotes(self): Returns the list of notes in the scale
+        GetKeys(self): Returns the list of keys representing the notes in the scale
+    """
+    def __init__(self,notes,keys):
+        self.notes = notes
+        self.keys = keys
+    def GetNotes(self):
+        return self.notes
+    def GetKeys(self):
+        return self.keys
