@@ -1,1 +1,156 @@
+class note:
+    """A CLass to represent a preset note with a fixed frequency
+    Args:
+        private frequency (float): The frequency of the note in Hz
+    Methods:
+        __init__(self, frequency): Initializes the note with the given frequency
+        GetFrequency(self): Returns the frequency of the note
 
+    """
+    def __init__(self, frequency):
+        self.__frequency = abs(frequency)
+    def GetFrequency(self):
+        return self.__frequency
+
+
+class Signal(note):
+    """A Class to represent a real signal inherted from the note class with a modifiable frequency
+    Args:
+        public frequency (float): The frequency of the signal in Hz
+    Methods:
+        __init__(self, frequency): Initializes the signal with the given frequency
+        GetFrequency(self): Returns the frequency of the signal
+        SetFrequency(self, frequency): Sets the frequency of the signal to the given value
+    """
+    def __init__(self, frequency):
+        super().__init__(frequency)
+        self.frequency = abs(frequency)
+    def SetFrequency(self, frequency):
+        self.frequency = frequency
+
+
+class scale:
+    """A Class to represent a musical scale with a list of notes
+    Args:
+        notes (list): A list of note objects representing the notes in the scale
+        keys (list): A list of keys as characters representing the notes in the scale
+    Methods:
+        __init__(self, notes): Initializes the scale with the given list of notes
+        GetNotes(self): Returns the list of notes in the scale
+        GetKeys(self): Returns the list of keys representing the notes in the scale
+    """
+    def __init__(self,notes,keys):
+        self.notes = notes
+        self.keys = keys
+    def GetNotes(self):
+        return self.notes
+    def GetKeys(self):
+        return self.keys
+class note_analyser:
+    """A Class to analyze a signal and determine the closest note in a given scale
+    args:
+        signal_in (Signal): The signal to be analyzed
+        tune (scale): The scale to be used for tuning
+        index (int): The index of the closest note in the scale
+        error (float): A temporary value used for storing the difference between frequencies
+    Methods:
+        __init__(self, signal_in, tune): Initializes the note analyser with the given signal and scale
+        Find_String(self): Finds the closest note in the scale to the signal and returns its index
+        Find_Error(self): Finds the error between the signal frequency and the closest note frequency and returns it
+    """
+    def __init__(self, signal_in ,tune):
+        self.signal_in = signal_in
+        self.tune=tune
+        self.index = self.Find_String(self)
+        self.error =0
+
+    
+    def Find_String(self):
+        """Finds the closest note in the scale to the signal and returns its index
+        Returns:
+            int: The index of the closest note in the scale
+        """
+        self.error = abs(signal_in.GetFrequency() - tune.GetNotes()[0].GetFrequency())
+        self.index=0
+        for i in range(len(self.tune.GetNotes())):
+            
+            if self.error > abs(signal_in.GetFrequency() - tune.GetNotes()[i].GetFrequency()):
+                self.error = abs(signal_in.GetFrequency() - tune.GetNotes()[i].GetFrequency())
+                self.index = i
+        return index
+
+    def Find_Error(self):
+        """Finds the error between the signal frequency and the closest note frequency and returns it
+        Returns:
+            float: The error between the signal frequency and the closest note frequency
+            character: A character indicating whether the signal is flat (b), sharp (#), or in tune ( )
+        """
+        self.error = self.signal_in.GetFrequency() - self.tune.GetNotes()[self.index].GetFrequency()
+        if self.error < 0:
+            return self.error, 'b'
+        elif self.error > 0:
+            return self.error, '#'
+        else:
+            return self.error, ' '
+print("Test Script for Guitar Tuner")
+notep1= note(440)
+signalE1= Signal(0)
+signalE2= Signal(-100)
+signalp2= Signal(20000)
+signalp3= Signal(100)
+scalep4 = scale([note(82.41), note(110), note(146.83), note(196), note(246.94), note(329.63)], ['E', 'A', 'D', 'G', 'B' , 'e'])
+scalee3 = scale([],[])
+signalp5 = Signal(82.41)
+analysis1 = note_analyser(signalp5, scalep4)
+
+print("unit test for signal/note class")
+print(notep1.GetFrequency(), "should be : 440")
+print(signalE1.GetFrequency(), "should be : 0")
+print(signalE2.GetFrequency(), "should be : 100")
+print(signalp2.GetFrequency(), "should be : 20000")
+signalp3.SetFrequency(110)
+print(signalp3.GetFrequency(), "should be : 110")
+print("unit test for scale class")
+print(scalep4.GetNotes()[0].GetFrequency(), "should be : 82.41")
+print(scalep4.GetKeys()[0], "should be : E")
+print(scalep4.GetNotes()[1].GetFrequency(), "should be : 110")
+print(scalep4.GetKeys()[1], "should be : A")
+print("unit test for note analyser class")
+print(analysis1.Find_String(), "should be : E")
+analysis1.GetSignal().SetFrequency(78.3)
+print(analysis1.Find_String(), "should be : E")
+analysis1.GetSignal().SetFrequency(60)
+print(analysis1.Find_String(), "should be : E")
+analysis1.GetSignal().SetFrequency(20000)
+print(analysis1.Find_String(), "should be : e")
+analysis1.GetSignal().SetFrequency(82.41)
+analysis1.Find_String()
+print(analysis1.Find_Error(), "should be : (0, '=')")
+analysis1.GetSignal().SetFrequency(81)
+print(analysis1.Find_Error(), "should be : (-1.41, 'b')")
+analysis1.GetSignal().SetFrequency(83)
+print(analysis1.Find_Error(), "should be : (0.59, '#')")
+analysis1.GetSignal().SetFrequency(82.2)
+print(analysis1.Find_Error(), "should be : (-0.21, '=')")
+print("Simulated Integration Test for Guitar Tuner")
+analysis1.GetSignal().SetFrequency(81)
+print(analysis1.Find_String(), "should be : E")
+print(analysis1.Find_Error(), "should be : (-1.41, 'b')")
+analysis1.GetSignal().SetFrequency(81.25)
+print(analysis1.Find_Error(), "should be : (-1.16, 'b')")
+analysis1.GetSignal().SetFrequency(81.5)
+print(analysis1.Find_Error(), "should be : (-0.91, 'b')")
+analysis1.GetSignal().SetFrequency(81.75)
+print(analysis1.Find_Error(), "should be : (-0.66, 'b')")
+analysis1.GetSignal().SetFrequency(82)
+print(analysis1.Find_Error(), "should be : (-0.41, 'b')")
+analysis1.GetSignal().SetFrequency(82.25)
+print(analysis1.Find_Error(), "should be : (-0.16, '=')")
+analysis1.GetSignal().SetFrequency(82.5)
+print(analysis1.Find_Error(), "should be : (0.09, '=')")
+analysis1.GetSignal().SetFrequency(82.75)
+print(analysis1.Find_Error(), "should be : (0.34, '#')")
+analysis1.GetSignal().SetFrequency(83)
+print(analysis1.Find_Error(), "should be : (0.59, '#')")
+
+print("All tests completed successfully")
